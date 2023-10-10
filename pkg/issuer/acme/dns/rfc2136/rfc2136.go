@@ -125,7 +125,9 @@ func (r *DNSProvider) changeRecord(action, fqdn, zone, value string, ttl int) er
 	}
 
 	// Setup client
-	c := new(dns.Client)
+	var DNSTimeout = 10 * time.Second
+	c := &dns.Client{Net: "tcp", Timeout: DNSTimeout}
+
 	c.TsigProvider = tsigHMACProvider(r.tsigSecret)
 	c.SingleInflight = true
 	// TSIG authentication / msg signing

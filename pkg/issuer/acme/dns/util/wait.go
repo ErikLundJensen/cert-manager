@@ -196,6 +196,9 @@ func DNSQuery(fqdn string, rtype uint16, nameservers []string, recursive bool) (
 		} else {
 			in, _, err = udp.Exchange(m, ns)
 
+			if (err != nil ){
+				logf.V(logf.InfoLevel).Infof("UDP dns lookup failed: %v", err)
+			}
 			// Try TCP if UDP fails
 			if (in != nil && in.Truncated) ||
 				(err != nil && strings.HasPrefix(err.Error(), "read udp") && strings.HasSuffix(err.Error(), "i/o timeout")) {
